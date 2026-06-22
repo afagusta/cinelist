@@ -1,31 +1,17 @@
-@extends('layouts.adminlte4.main')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-@section('header', 'Dashboard Statistik')
-
-@section('content')
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <div class="small-box text-bg-primary">
-            <div class="inner">
-                <h3>{{ $totalUsers }}</h3>
-                <p>Total Pengguna</p>
-            </div>
-            <div class="small-box-icon">
-                <i class="bi bi-people-fill"></i>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    {{ __("You're logged in!") }}
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="col-lg-3 col-6">
-        <div class="small-box text-bg-success">
-            <div class="inner">
-                <h3>{{ $totalWatchlists }}</h3>
-                <p>Total Film Disimpan</p>
-            </div>
-            <div class="small-box-icon">
-                <i class="bi bi-film"></i>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+</x-app-layout>

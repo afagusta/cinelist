@@ -15,7 +15,7 @@ class MovieController extends Controller
             $response = Http::withToken(env('TMDB_TOKEN'))
                 ->get('https://api.themoviedb.org/3/search/multi', [
                     'query' => $query,
-                    'language' => 'id-ID' /
+                    'language' => 'id-ID'
                 ]);
         } else {
             $response = Http::withToken(env('TMDB_TOKEN'))
@@ -27,5 +27,24 @@ class MovieController extends Controller
         $movies = $response->json()['results'] ?? [];
 
         return view('movies.index', compact('movies', 'query'));
+    }
+
+    // Fungsi baru untuk Halaman Detail
+    public function show($id, $type = 'movie')
+    {
+        // Menembak endpoint detail TMDB, dan menarik data aktor (credits) sekaligus
+        $response = Http::withToken(env('TMDB_TOKEN'))
+            ->get("https://api.themoviedb.org/3/{$type}/{$id}", [
+                'language' => 'id-ID',
+                'append_to_response' => 'credits'
+            ]);
+
+        if ($response->failed()) {
+            abort(404, 'Film tidak ditemukan.');
+        }
+
+        $movie = $response->json();
+
+        return view('movies.show', compact('movie', 'type'));
     }
 }

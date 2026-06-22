@@ -8,6 +8,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
+            <x-auth-session-status class="mb-4" :status="session('status')" />
+            
             <form action="{{ route('movies.index') }}" method="GET" class="mb-6 flex gap-2">
                 <input type="text" name="search" value="{{ $query ?? '' }}" placeholder="Cari film atau tv series..." class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full md:w-1/2">
                 <x-primary-button type="submit">
@@ -31,6 +33,18 @@
                             <p class="text-sm text-gray-600 mt-2 line-clamp-3">
                                 {{ $movie['overview'] ?? 'Sinopsis tidak tersedia.' }}
                             </p>
+                            
+                            <div class="mt-auto pt-4">
+                                <form action="{{ route('watchlists.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="tmdb_movie_id" value="{{ $movie['id'] }}">
+                                    <input type="hidden" name="title" value="{{ $movie['title'] ?? $movie['name'] ?? 'Tanpa Judul' }}">
+                                    <input type="hidden" name="poster_path" value="{{ $movie['poster_path'] ?? '' }}">
+                                    <button type="submit" class="w-full bg-indigo-600 text-white text-sm font-semibold py-2 rounded hover:bg-indigo-700 transition">
+                                        + Watchlist
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 @endforeach

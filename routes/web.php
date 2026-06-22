@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MovieController; 
+use App\Http\Controllers\WatchlistController; 
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +19,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+
+    Route::get('/watchlists', [WatchlistController::class, 'index'])->name('watchlists.index');
+    Route::post('/watchlists', [WatchlistController::class, 'store'])->name('watchlists.store');
+    Route::delete('/watchlists/{watchlist}', [WatchlistController::class, 'destroy'])->name('watchlists.destroy');
 });
 
 require __DIR__.'/auth.php';

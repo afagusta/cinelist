@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <a href="{{ route('movies.index') }}" class="text-indigo-600 hover:underline">&larr; Kembali ke Katalog</a>
+            <a href="{{ url()->previous() }}" class="text-indigo-600 hover:underline">&larr; Kembali</a>
         </h2>
     </x-slot>
 

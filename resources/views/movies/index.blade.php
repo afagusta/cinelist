@@ -11,7 +11,18 @@
             <x-auth-session-status class="mb-4" :status="session('status')" />
             
             <form action="{{ route('movies.index') }}" method="GET" class="mb-6 flex gap-2">
+                
                 <input type="text" name="search" value="{{ $query ?? '' }}" placeholder="Cari film atau tv series..." class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full md:w-1/2">
+                
+                <select name="genre" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full md:w-1/4">
+                    <option value="">Semua Genre</option>
+                    @foreach($dropdownGenres as $genre)
+                        <option value="{{ $genre['id'] }}" {{ (isset($genreId) && $genreId == $genre['id']) ? 'selected' : '' }}>
+                            {{ $genre['name'] }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <x-primary-button type="submit">
                     {{ __('Cari') }}
                 </x-primary-button>
@@ -30,6 +41,18 @@
                         </a>
                         
                         <div class="p-4 flex-1 flex flex-col">
+                            
+                            @if(isset($movie['genre_ids']))
+                                <div class="flex gap-1 flex-wrap mb-3">
+                                    @foreach(array_slice($movie['genre_ids'], 0, 3) as $genreId)
+                                        @if(isset($genreMap[$genreId]))
+                                            <a href="{{ route('movies.index', ['genre' => $genreId]) }}" class="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[11px] font-semibold rounded-full border border-indigo-100 hover:bg-indigo-200 hover:text-indigo-900 transition cursor-pointer">
+                                                {{ $genreMap[$genreId] }}
+                                            </a>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @endif
                             
                             <a href="{{ route('movies.show', ['id' => $movie['id'], 'type' => $movie['media_type'] ?? 'movie']) }}">
                                 <h3 class="font-bold text-lg text-gray-900 leading-tight hover:text-indigo-600 transition">

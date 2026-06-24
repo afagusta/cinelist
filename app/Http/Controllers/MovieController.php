@@ -88,4 +88,32 @@ class MovieController extends Controller
         // Kirim variabel $reviews ke dalam view bersama $movie dan $type
         return view('movies.show', compact('movie', 'type', 'reviews'));
     }
+
+    // --- FUNGSI DASHBOARD YANG SUDAH DIUPGRADE AGAR PINTAR ---
+    public function dashboard()
+    {
+        $user = auth()->user();
+
+        // JIKA YANG LOGIN ADALAH ADMIN, LANGSUNG LEMPAR KE PANEL ADMIN
+        if ($user && (
+            $user->role === 'admin' || 
+            $user->role === 'Admin' || 
+            $user->role == 1 || 
+            $user->is_admin == 1 ||
+            (method_exists($user, 'hasRole') && $user->hasRole('admin'))
+        )) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        // JIKA USER BIASA, TAMPILKAN FILM TERBAIK SEPERTI BIASA
+        $response = Http::withToken(env('TMDB_TOKEN'))
+            ->get('https://api.themoviedb.org/3/movie/top_rated', [
+                'language' => 'id-ID',
+                'page' => 1
+            ]);
+
+        $topMovies = $response->json()['results'] ?? [];
+
+        return view('dashboard', compact('topMovies'));
+    }
 }

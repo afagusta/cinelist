@@ -11,9 +11,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// --- ROUTE DASHBOARD DIUBAH KE MOVIECONTROLLER ---
+Route::get('/dashboard', [MovieController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,11 +31,14 @@ Route::middleware('auth')->group(function () {
 
     // Route Review / Ulasan Lokal
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy'); // <-- Tambahan route delete
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    
+    // --- TAMBAHAN: Route untuk Admin menghapus user ---
+    Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 });
 
 require __DIR__.'/auth.php';

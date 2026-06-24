@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http; 
+use App\Models\Review; // <-- Tambahan: Memanggil model Review
 
 class MovieController extends Controller
 {
@@ -49,7 +50,7 @@ class MovieController extends Controller
         return view('movies.index', compact('movies', 'query', 'genreMap', 'dropdownGenres', 'genreId'));
     }
 
-    // Fungsi show yang sudah di-upgrade agar pintar mendeteksi TV Series
+    // Fungsi show yang sudah di-upgrade agar pintar mendeteksi TV Series & Menarik Ulasan
     public function show($id, $type = 'movie')
     {
         // 1. Coba cari dengan tipe default (movie)
@@ -76,6 +77,15 @@ class MovieController extends Controller
 
         $movie = $response->json();
 
-        return view('movies.show', compact('movie', 'type'));
+        // --- TAMBAHAN: Tarik ulasan lokal dari database ---
+        // Mengambil review beserta data user yang menulisnya, diurutkan dari yang terbaru
+        $reviews = Review::with('user')
+            ->where('tmdb_movie_id', $id)
+            ->latest()
+            ->get();
+        // ---------------------------------------------------
+
+        // Kirim variabel $reviews ke dalam view bersama $movie dan $type
+        return view('movies.show', compact('movie', 'type', 'reviews'));
     }
 }

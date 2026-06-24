@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MovieController; 
 use App\Http\Controllers\WatchlistController; 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReviewController; 
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,16 +20,17 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    // Route Katalog Film
     Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
     
-    // Tambahan Route Halaman Detail Film
     Route::get('/movies/detail/{id}/{type?}', [MovieController::class, 'show'])->name('movies.show');
 
-    // Route Watchlist (CRUD)
     Route::get('/watchlists', [WatchlistController::class, 'index'])->name('watchlists.index');
     Route::post('/watchlists', [WatchlistController::class, 'store'])->name('watchlists.store');
     Route::delete('/watchlists/{watchlist}', [WatchlistController::class, 'destroy'])->name('watchlists.destroy');
+
+    // Route Review / Ulasan Lokal
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy'); // <-- Tambahan route delete
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

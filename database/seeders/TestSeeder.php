@@ -8,7 +8,7 @@ use App\Models\User;
 use Spatie\Permission\Models\Role; 
 use Illuminate\Support\Facades\Hash; 
 
-class RoleAndUserSeeder extends Seeder
+class TestSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -27,20 +27,23 @@ class RoleAndUserSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        // 3. Buat Akun User Biasa
+        // 3. Buat Akun User Biasa (Manual)
         $user = User::firstOrCreate([
             'email' => 'user@cinelist.com',
-            'name' => 'Biasa aja',
+            'name' => 'Pengguna Biasa',
             'password' => Hash::make('password'),
         ]);
         $user->assignRole($userRole);
 
-        // 4. Buat Akun User 1 Tambahan
-        $user1 = User::firstOrCreate([
-            'email' => 'user1@cinelist.com',
-            'name' => 'Afa Ganteng',
-            'password' => Hash::make('password'),
+        // 4. BIKIN 100 AKUN OTOMATIS (Pake Factory)
+        // Laravel akan otomatis membuatkan 100 nama & email random
+        $pasukanUser = User::factory()->count(1000)->create([
+            'password' => Hash::make('password'), // Paksa semua password jadi 'password'
         ]);
-        $user1->assignRole($userRole);
+
+        // Looping untuk memberikan role 'user' ke 100 akun yang baru dibuat tadi
+        foreach ($pasukanUser as $prajurit) {
+            $prajurit->assignRole($userRole);
+        }
     }
 }

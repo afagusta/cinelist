@@ -38,11 +38,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        @role('admin')
-                            <x-dropdown-link :href="route('admin.dashboard')">
-                                {{ __('Panel Admin') }}
-                            </x-dropdown-link>
-                        @endrole
+                       
 
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}

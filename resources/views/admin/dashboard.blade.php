@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Panel Admin - Dashboard Statistik') }}
+            {{ __('Panel Admin') }}
         </h2>
     </x-slot>
 
@@ -44,7 +44,7 @@
 
             <div class="bg-white rounded-lg shadow overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                    <h3 class="text-lg font-bold text-gray-900">Manajemen Pengguna (User Management)</h3>
+                    <h3 class="text-lg font-bold text-gray-900">Manajemen Pengguna</h3>
                 </div>
                 
                 <div class="overflow-x-auto">

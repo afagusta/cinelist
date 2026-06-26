@@ -89,6 +89,7 @@
                                     <input type="hidden" name="tmdb_movie_id" value="{{ $movie['id'] }}">
                                     <input type="hidden" name="title" value="{{ $title }}">
                                     <input type="hidden" name="poster_path" value="{{ $movie['poster_path'] ?? '' }}">
+                                    <input type="hidden" name="type" value="{{ $type }}">
                                     
                                     <button type="submit" class="text-indigo-700 bg-white hover:bg-gray-100 font-bold px-6 py-2.5 rounded-full shadow-lg flex items-center w-40 justify-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>

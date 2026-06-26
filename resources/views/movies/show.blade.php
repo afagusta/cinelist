@@ -1,26 +1,33 @@
 <x-app-layout>
+    <!-- HERO SECTION (Cinematic Backdrop) -->
     <div class="relative w-full bg-gray-900 min-h-[70vh] flex items-center pb-12 pt-8 md:pt-16">
+        <!-- Background Image dengan Gradient Overlay -->
         <div class="absolute inset-0 overflow-hidden">
             @if(isset($movie['backdrop_path']))
                 <img src="https://image.tmdb.org/t/p/original{{ $movie['backdrop_path'] }}" alt="Backdrop" class="w-full h-full object-cover opacity-30 transform scale-105">
             @elseif(isset($movie['poster_path']))
                 <img src="https://image.tmdb.org/t/p/original{{ $movie['poster_path'] }}" alt="Backdrop Fallback" class="w-full h-full object-cover opacity-20 blur-sm transform scale-105">
             @endif
+            <!-- Gradient atas ke bawah dan kiri ke kanan agar teks lebih terbaca -->
             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/50 to-transparent"></div>
         </div>
 
+        <!-- Konten Utama di Atas Background -->
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             
+            <!-- Tombol Kembali -->
             <a href="{{ route('movies.index') }}" class="inline-flex items-center text-gray-300 hover:text-white mb-6 md:mb-10 transition duration-300 group bg-gray-800/50 hover:bg-gray-700/50 px-4 py-2 rounded-full backdrop-blur-sm w-fit border border-gray-600/50">
                 <svg class="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Kembali ke Katalog
             </a>
 
+            <!-- Notifikasi Alert -->
             <x-auth-session-status class="mb-6" :status="session('status')" />
 
             <div class="flex flex-col md:flex-row gap-8 lg:gap-12 items-start">
                 
+                <!-- Poster Kiri -->
                 <div class="w-48 sm:w-64 md:w-1/3 lg:w-1/4 flex-shrink-0 mx-auto md:mx-0 relative group">
                     @if (isset($movie['poster_path']))
                         <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="Poster" class="w-full rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-700/50 transition duration-500 group-hover:scale-[1.02]">
@@ -32,6 +39,7 @@
                     @endif
                 </div>
 
+                <!-- Info Kanan -->
                 <div class="w-full md:w-2/3 lg:w-3/4 flex flex-col justify-center text-white">
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-3 drop-shadow-lg tracking-tight">
                         {{ $movie['title'] ?? $movie['name'] ?? 'Tanpa Judul' }}
@@ -78,6 +86,9 @@
                             <input type="hidden" name="tmdb_movie_id" value="{{ $movie['id'] }}">
                             <input type="hidden" name="title" value="{{ $movie['title'] ?? $movie['name'] ?? 'Tanpa Judul' }}">
                             <input type="hidden" name="poster_path" value="{{ $movie['poster_path'] ?? '' }}">
+                            <!-- Tambahkan input hidden type di bawah ini -->
+                            <input type="hidden" name="type" value="{{ $type ?? 'movie' }}"> 
+                            
                             <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition duration-300 shadow-lg shadow-indigo-600/30 flex items-center justify-center group transform hover:-translate-y-1">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                                 Simpan ke Watchlist
@@ -89,6 +100,7 @@
         </div>
     </div>
 
+    <!-- REVIEW SECTION -->
     <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row gap-8">

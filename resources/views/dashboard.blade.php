@@ -27,40 +27,49 @@
 
     <div class="py-12 bg-gray-100">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 px-4 sm:px-0">
-                <div>
-                    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Pilihan Terbaik Sepanjang Masa</h2>
-                    <p class="text-gray-500 mt-2 text-lg">Berdasarkan rating global penonton di seluruh dunia</p>
-                </div>
+            <div class="mb-8 px-4 sm:px-0">
+                <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Pilihan Terbaik Sepanjang Masa</h2>
+                <p class="text-gray-500 mt-2 text-lg">Berdasarkan rating global penonton di seluruh dunia</p>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-4 sm:px-0">
                 @foreach(array_slice($topMovies, 1) as $movie)
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 group cursor-pointer">
-                        <a href="{{ route('movies.show', ['id' => $movie['id'], 'type' => 'movie']) }}">
-                            <div class="relative h-80 overflow-hidden">
-                                <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] ?? $movie['name'] }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-                                
-                                <div class="absolute top-0 right-0 bg-gray-900/80 text-yellow-400 font-bold px-3 py-1 m-3 rounded-lg flex items-center backdrop-blur-md">
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                    {{ number_format($movie['vote_average'], 1) }}
-                                </div>
-                                
-                                <div class="absolute inset-0 bg-gray-900/10 group-hover:bg-gray-900/50 transition duration-300 flex items-center justify-center">
-                                    <span class="text-white font-bold opacity-0 group-hover:opacity-100 bg-indigo-600 px-5 py-2.5 rounded-full transform translate-y-4 group-hover:translate-y-0 transition duration-300 shadow-lg">
-                                        Lihat Detail
-                                    </span>
-                                </div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 group relative">
+                        
+                        <div class="relative h-80 overflow-hidden">
+                            <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] ?? $movie['name'] }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            
+                            <div class="absolute top-0 right-0 bg-gray-900/80 text-yellow-400 font-bold px-3 py-1 m-3 rounded-lg flex items-center backdrop-blur-md z-10">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                {{ number_format($movie['vote_average'], 1) }}
                             </div>
-                            <div class="p-5">
-                                <h3 class="font-bold text-gray-900 text-lg truncate" title="{{ $movie['title'] ?? $movie['name'] }}">
-                                    {{ $movie['title'] ?? $movie['name'] }}
-                                </h3>
-                                <p class="text-gray-500 text-sm mt-1.5 font-medium">
-                                    Rilis: {{ \Carbon\Carbon::parse($movie['release_date'] ?? $movie['first_air_date'] ?? now())->format('Y') }}
-                                </p>
+
+                            <div class="absolute inset-0 bg-gray-900/40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center gap-3">
+                                <a href="{{ route('movies.show', ['id' => $movie['id'], 'type' => 'movie']) }}" class="text-white font-bold bg-indigo-600 px-6 py-2.5 rounded-full shadow-lg hover:bg-indigo-500 transition w-40 text-center">
+                                    Lihat Detail
+                                </a>
+                                <form action="{{ route('watchlists.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="tmdb_movie_id" value="{{ $movie['id'] }}">
+                                    <input type="hidden" name="title" value="{{ $movie['title'] ?? $movie['name'] }}">
+                                    <input type="hidden" name="poster_path" value="{{ $movie['poster_path'] ?? '' }}">
+                                    <input type="hidden" name="type" value="movie">
+                                    <button type="submit" class="text-indigo-700 bg-white hover:bg-gray-100 font-bold px-6 py-2.5 rounded-full shadow-lg flex items-center w-40 justify-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                                        Simpan
+                                    </button>
+                                </form>
                             </div>
-                        </a>
+                        </div>
+
+                        <div class="p-5">
+                            <h3 class="font-bold text-gray-900 text-lg truncate" title="{{ $movie['title'] ?? $movie['name'] }}">
+                                {{ $movie['title'] ?? $movie['name'] }}
+                            </h3>
+                            <p class="text-gray-500 text-sm mt-1.5 font-medium">
+                                Rilis: {{ \Carbon\Carbon::parse($movie['release_date'] ?? $movie['first_air_date'] ?? now())->format('Y') }}
+                            </p>
+                        </div>
                     </div>
                 @endforeach
             </div>

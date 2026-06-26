@@ -20,17 +20,21 @@ class WatchlistController extends Controller
             'tmdb_movie_id' => 'required|integer',
             'title' => 'required|string',
             'poster_path' => 'nullable|string',
+            'type' => 'required|string', // Tambahkan validasi untuk type
         ]);
 
+        // Gunakan firstOrCreate dengan menyertakan type dalam kriteria pencarian
+        // Agar film 'The Bear' (Series) dan film (Movie) dengan ID sama tidak tertukar
         Watchlist::firstOrCreate([
             'user_id' => Auth::id(),
             'tmdb_movie_id' => $request->tmdb_movie_id,
+            'type' => $request->type, // Kriteria pencarian unik berdasarkan ID + Tipe
         ], [
             'title' => $request->title,
             'poster_path' => $request->poster_path,
         ]);
 
-        return back()->with('status', 'Film berhasil ditambahkan ke Watchlist!');
+        return back()->with('success', 'Film berhasil ditambahkan ke Watchlist!');
     }
 
     public function destroy(Watchlist $watchlist)
@@ -39,6 +43,6 @@ class WatchlistController extends Controller
             $watchlist->delete();
         }
 
-        return back()->with('status', 'Film dihapus dari Watchlist!');
+        return back()->with('success', 'Film dihapus dari Watchlist!');
     }
 }

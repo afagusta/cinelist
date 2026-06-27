@@ -11,7 +11,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// --- ROUTE DASHBOARD DIUBAH KE MOVIECONTROLLER ---
 Route::get('/dashboard', [MovieController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -37,7 +36,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     
-    // --- TAMBAHAN: Route untuk Admin menghapus user ---
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 });
 

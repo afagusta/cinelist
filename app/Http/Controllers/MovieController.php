@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http; 
-use App\Models\Review; // <-- Tambahan: Memanggil model Review
+use App\Models\Review; 
 
 class MovieController extends Controller
 {
@@ -50,17 +50,14 @@ class MovieController extends Controller
         return view('movies.index', compact('movies', 'query', 'genreMap', 'dropdownGenres', 'genreId'));
     }
 
-    // Fungsi show yang sudah di-upgrade agar pintar mendeteksi TV Series & Menarik Ulasan
     public function show($id, $type = 'movie')
     {
-        // 1. Coba cari dengan tipe default (movie)
         $response = Http::withToken(env('TMDB_TOKEN'))
             ->get("https://api.themoviedb.org/3/{$type}/{$id}", [
                 'language' => 'id-ID',
                 'append_to_response' => 'credits'
             ]);
 
-        // 2. Kalau gagal dan tipenya tadi 'movie', otomatis cari sebagai 'tv'
         if ($response->failed() && $type === 'movie') {
             $type = 'tv'; 
             $response = Http::withToken(env('TMDB_TOKEN'))
@@ -70,31 +67,24 @@ class MovieController extends Controller
                 ]);
         }
 
-        // 3. Kalau dicari di movie dan tv dua-duanya tetap tidak ada, baru lempar error 404
         if ($response->failed()) {
             abort(404, 'Film atau TV Series tidak ditemukan di TMDB.');
         }
 
         $movie = $response->json();
 
-        // --- TAMBAHAN: Tarik ulasan lokal dari database ---
-        // Mengambil review beserta data user yang menulisnya, diurutkan dari yang terbaru
         $reviews = Review::with('user')
             ->where('tmdb_movie_id', $id)
             ->latest()
             ->get();
-        // ---------------------------------------------------
-
-        // Kirim variabel $reviews ke dalam view bersama $movie dan $type
+     
         return view('movies.show', compact('movie', 'type', 'reviews'));
     }
 
-    // --- FUNGSI DASHBOARD YANG SUDAH DIUPGRADE AGAR PINTAR ---
     public function dashboard()
     {
         $user = auth()->user();
 
-        // JIKA YANG LOGIN ADALAH ADMIN, LANGSUNG LEMPAR KE PANEL ADMIN
         if ($user && (
             $user->role === 'admin' || 
             $user->role === 'Admin' || 
@@ -105,7 +95,6 @@ class MovieController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        // JIKA USER BIASA, TAMPILKAN FILM TERBAIK SEPERTI BIASA
         $response = Http::withToken(env('TMDB_TOKEN'))
             ->get('https://api.themoviedb.org/3/movie/top_rated', [
                 'language' => 'id-ID',

@@ -15,11 +15,11 @@ class TestSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Buat Role Admin dan User
+        
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $userRole = Role::firstOrCreate(['name' => 'user']);
 
-        // 2. Buat Akun Admin CineList
+        
         $admin = User::firstOrCreate([
             'email' => 'admin@cinelist.com',
             'name' => 'Admin CineList',
@@ -27,7 +27,7 @@ class TestSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        // 3. Buat Akun User Biasa (Manual)
+        
         $user = User::firstOrCreate([
             'email' => 'user@cinelist.com',
             'name' => 'Pengguna Biasa',
@@ -35,13 +35,12 @@ class TestSeeder extends Seeder
         ]);
         $user->assignRole($userRole);
 
-        // 4. BIKIN 100 AKUN OTOMATIS (Pake Factory)
-        // Laravel akan otomatis membuatkan 100 nama & email random
+        
         $pasukanUser = User::factory()->count(1000)->create([
-            'password' => Hash::make('password'), // Paksa semua password jadi 'password'
+            'password' => Hash::make('password'), 
         ]);
 
-        // Looping untuk memberikan role 'user' ke 100 akun yang baru dibuat tadi
+        
         foreach ($pasukanUser as $prajurit) {
             $prajurit->assignRole($userRole);
         }

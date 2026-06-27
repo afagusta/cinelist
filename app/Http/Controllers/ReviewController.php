@@ -28,7 +28,6 @@ class ReviewController extends Controller
 
     public function destroy(Review $review)
     {
-        // Cek keamanan: Boleh dihapus JIKA dia pemilik ulasan ATAU dia adalah Admin
         if (Auth::id() !== $review->user_id && Auth::user()->role !== 'admin') {
             abort(403, 'Anda tidak memiliki akses untuk menghapus ulasan ini.');
         }

@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('watchlists', function (Blueprint $table) {
-            // Menambahkan kolom 'type' setelah 'tmdb_movie_id'
-            // Defaultnya kita set 'movie' biar data lama tidak error
+           
             $table->string('type')->default('movie')->after('tmdb_movie_id');
         });
     }
@@ -24,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('watchlists', function (Blueprint $table) {
-            // Menghapus kolom 'type' jika rollback
+           
             $table->dropColumn('type');
         });
     }

@@ -15,11 +15,11 @@ class RoleAndUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Buat Role Admin dan User
+        
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $userRole = Role::firstOrCreate(['name' => 'user']);
 
-        // 2. Buat Akun Admin CineList
+        
         $admin = User::firstOrCreate([
             'email' => 'admin@cinelist.com',
             'name' => 'Admin CineList',
@@ -27,7 +27,7 @@ class RoleAndUserSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        // 3. Buat Akun User Biasa
+        
         $user = User::firstOrCreate([
             'email' => 'user@cinelist.com',
             'name' => 'Biasa aja',
@@ -35,7 +35,7 @@ class RoleAndUserSeeder extends Seeder
         ]);
         $user->assignRole($userRole);
 
-        // 4. Buat Akun User 1 Tambahan
+        
         $user1 = User::firstOrCreate([
             'email' => 'user1@cinelist.com',
             'name' => 'Afa Ganteng',

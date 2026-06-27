@@ -20,15 +20,13 @@ class WatchlistController extends Controller
             'tmdb_movie_id' => 'required|integer',
             'title' => 'required|string',
             'poster_path' => 'nullable|string',
-            'type' => 'required|string', // Tambahkan validasi untuk type
+            'type' => 'required|string', 
         ]);
 
-        // Gunakan firstOrCreate dengan menyertakan type dalam kriteria pencarian
-        // Agar film 'The Bear' (Series) dan film (Movie) dengan ID sama tidak tertukar
         Watchlist::firstOrCreate([
             'user_id' => Auth::id(),
             'tmdb_movie_id' => $request->tmdb_movie_id,
-            'type' => $request->type, // Kriteria pencarian unik berdasarkan ID + Tipe
+            'type' => $request->type,
         ], [
             'title' => $request->title,
             'poster_path' => $request->poster_path,

@@ -8,14 +8,14 @@
                     </a>
                 </div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-300 hover:text-white border-none">
+                <div class="hidden sm:-my-px sm:ml-10 sm:flex sm:items-center sm:gap-2">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('movies.index')" :active="request()->routeIs('movies.index')" class="text-gray-300 hover:text-white border-none">
+                    <x-nav-link :href="route('movies.index')" :active="request()->routeIs('movies.index')">
                         {{ __('Katalog Film') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('watchlists.index')" :active="request()->routeIs('watchlists.index')" class="text-gray-300 hover:text-white border-none">
+                    <x-nav-link :href="route('watchlists.index')" :active="request()->routeIs('watchlists.index')">
                         {{ __('Watchlist') }}
                     </x-nav-link>
                 </div>

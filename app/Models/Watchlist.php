@@ -10,11 +10,11 @@ class Watchlist extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 
-        'tmdb_movie_id', 
-        'title', 
+        'user_id',
+        'tmdb_movie_id',
+        'title',
         'poster_path',
-        'type' 
+        'type',
     ];
 
     public function user()

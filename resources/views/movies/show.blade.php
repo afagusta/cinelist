@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="relative w-full bg-gray-950 min-h-[70vh] flex items-center pb-12 pt-8 md:pt-16">
+    <div class="relative w-full bg-gray-950 min-h-[50vh] md:min-h-[70vh] flex items-center pb-12 pt-8 md:pt-16">
         <div class="absolute inset-0 overflow-hidden">
             @if(isset($movie['backdrop_path']))
                 <img src="https://image.tmdb.org/t/p/original{{ $movie['backdrop_path'] }}" alt="Backdrop" class="w-full h-full object-cover opacity-30 transform scale-105">
@@ -21,7 +21,7 @@
 
             <div class="flex flex-col md:flex-row gap-8 lg:gap-12 items-start">
                 
-                <div class="w-48 sm:w-64 md:w-1/3 lg:w-1/4 flex-shrink-0 mx-auto md:mx-0 relative group">
+                <div class="w-40 sm:w-48 md:w-1/3 lg:w-1/4 flex-shrink-0 mx-auto md:mx-0 relative group">
                     @if (isset($movie['poster_path']))
                         <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="Poster" class="w-full rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-700/50 transition duration-500 group-hover:scale-[1.02]">
                     @else
@@ -161,15 +161,11 @@
                                         </div>
                                         
                                         @if(auth()->check() && (auth()->id() === $review->user_id || auth()->user()->role === 'admin'))
-                                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-400 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-red-900/30 hover:bg-red-600 transition border border-red-800/50 hover:border-red-500 flex items-center" onclick="return confirm('Yakin ingin menghapus ulasan ini secara permanen?')">
-                                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                    Hapus
-                                                </button>
-                                            </form>
-                                        @endif
+                                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                     </div>
                                     
                                     <div class="text-yellow-400 text-xs mb-3 pl-13">

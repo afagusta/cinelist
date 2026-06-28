@@ -63,7 +63,7 @@
 
                     <div class="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full relative">
                         
-                        <div class="relative h-[360px] sm:h-[400px] overflow-hidden bg-gray-800">
+                        <div class="relative h-[280px] sm:h-[400px] overflow-hidden bg-gray-800">
                             @if(!empty($movie['poster_path']))
                                 <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $title }}" 
                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -79,7 +79,7 @@
                                 {{ number_format($movie['vote_average'] ?? 0, 1) }}
                             </div>
                             
-                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3">
                                 
                                 <a href="{{ route('movies.show', ['id' => $movie['id'], 'type' => $type]) }}" class="text-white font-bold bg-indigo-600 hover:bg-indigo-500 px-6 py-2.5 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg flex items-center w-40 justify-center">
                                     Lihat Detail
@@ -133,7 +133,7 @@
 
                     </div>
                 @empty
-                    <div class="col-span-full bg-gray-900 rounded-2xl p-12 text-center shadow-xl border border-gray-800 mx-4 sm:mx-0">
+                    <div class="col-span-full bg-gray-900 rounded-2xl p-6 sm:p-12 text-center shadow-xl border border-gray-800">
                         <svg class="w-16 h-16 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <h3 class="text-xl font-bold text-white mb-2">Pencarian Tidak Ditemukan</h3>
                         <p class="text-gray-400">Coba gunakan kata kunci lain atau hapus filter genre yang Anda pilih.</p>

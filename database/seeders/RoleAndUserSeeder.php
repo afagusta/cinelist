@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\User; 
-use Spatie\Permission\Models\Role; 
-use Illuminate\Support\Facades\Hash; 
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class RoleAndUserSeeder extends Seeder
 {
@@ -15,11 +14,10 @@ class RoleAndUserSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $userRole = Role::firstOrCreate(['name' => 'user']);
 
-        
         $admin = User::firstOrCreate([
             'email' => 'admin@cinelist.com',
             'name' => 'Admin CineList',
@@ -27,7 +25,6 @@ class RoleAndUserSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        
         $user = User::firstOrCreate([
             'email' => 'user@cinelist.com',
             'name' => 'Biasa aja',
@@ -35,7 +32,6 @@ class RoleAndUserSeeder extends Seeder
         ]);
         $user->assignRole($userRole);
 
-        
         $user1 = User::firstOrCreate([
             'email' => 'user1@cinelist.com',
             'name' => 'Afa Ganteng',

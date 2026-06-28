@@ -1,7 +1,7 @@
 <x-app-layout>
     @if(count($topMovies) > 0)
     @php $heroMovie = $topMovies[0]; @endphp
-    <div class="relative w-full h-[60vh] bg-gray-950 flex items-center justify-center overflow-hidden">
+    <div class="relative w-full h-[40vh] md:h-[60vh] bg-gray-950 flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 w-full h-full">
             <img src="https://image.tmdb.org/t/p/original{{ $heroMovie['backdrop_path'] }}" alt="{{ $heroMovie['title'] ?? $heroMovie['name'] }}" class="w-full h-full object-cover opacity-50">
             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent"></div>
@@ -36,7 +36,7 @@
                 @foreach(array_slice($topMovies, 1) as $movie)
                     <div class="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden hover:border-indigo-500 transition duration-300 transform hover:-translate-y-2 group relative">
                         
-                        <div class="relative h-80 overflow-hidden">
+                        <div class="relative h-56 md:h-80 overflow-hidden">
                             <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] ?? $movie['name'] }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             
                             <div class="absolute top-0 right-0 bg-gray-950/80 text-yellow-400 font-bold px-3 py-1 m-3 rounded-lg flex items-center backdrop-blur-md z-10 border border-gray-700/50">
@@ -44,7 +44,7 @@
                                 {{ number_format($movie['vote_average'], 1) }}
                             </div>
 
-                            <div class="absolute inset-0 bg-gray-950/70 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
+                            <div class="absolute inset-0 bg-gray-950/70 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
                                 <a href="{{ route('movies.show', ['id' => $movie['id'], 'type' => 'movie']) }}" class="text-white font-bold bg-indigo-600 px-6 py-2.5 rounded-full shadow-lg hover:bg-indigo-500 transition w-40 text-center">
                                     Lihat Detail
                                 </a>

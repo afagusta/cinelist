@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Watchlist;
-use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -12,9 +11,9 @@ class AdminController extends Controller
     {
         $totalUsers = User::where('id', '!=', auth()->id())->count();
         $totalWatchlists = Watchlist::count();
-        
+
         $users = User::where('id', '!=', auth()->id())->latest()->get();
-        
+
         return view('admin.dashboard', compact('totalUsers', 'totalWatchlists', 'users'));
     }
 

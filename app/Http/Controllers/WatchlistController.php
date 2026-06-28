@@ -11,6 +11,7 @@ class WatchlistController extends Controller
     public function index()
     {
         $watchlists = Auth::user()->watchlists()->latest()->get();
+
         return view('watchlists.index', compact('watchlists'));
     }
 
@@ -20,7 +21,7 @@ class WatchlistController extends Controller
             'tmdb_movie_id' => 'required|integer',
             'title' => 'required|string',
             'poster_path' => 'nullable|string',
-            'type' => 'required|string', 
+            'type' => 'required|string',
         ]);
 
         Watchlist::firstOrCreate([

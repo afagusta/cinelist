@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\User; 
-use Spatie\Permission\Models\Role; 
-use Illuminate\Support\Facades\Hash; 
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class TestSeeder extends Seeder
 {
@@ -15,11 +14,10 @@ class TestSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $userRole = Role::firstOrCreate(['name' => 'user']);
 
-        
         $admin = User::firstOrCreate([
             'email' => 'admin@cinelist.com',
             'name' => 'Admin CineList',
@@ -27,7 +25,6 @@ class TestSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        
         $user = User::firstOrCreate([
             'email' => 'user@cinelist.com',
             'name' => 'Pengguna Biasa',
@@ -35,12 +32,10 @@ class TestSeeder extends Seeder
         ]);
         $user->assignRole($userRole);
 
-        
         $pasukanUser = User::factory()->count(1000)->create([
-            'password' => Hash::make('password'), 
+            'password' => Hash::make('password'),
         ]);
 
-        
         foreach ($pasukanUser as $prajurit) {
             $prajurit->assignRole($userRole);
         }

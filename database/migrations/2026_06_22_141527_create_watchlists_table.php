@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('watchlists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->integer('tmdb_movie_id'); 
-            $table->string('title'); 
+            $table->integer('tmdb_movie_id');
+            $table->string('title');
             $table->string('poster_path')->nullable();
             $table->timestamps();
         });

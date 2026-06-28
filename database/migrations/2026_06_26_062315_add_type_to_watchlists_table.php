@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('watchlists', function (Blueprint $table) {
-           
+
             $table->string('type')->default('movie')->after('tmdb_movie_id');
         });
     }
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('watchlists', function (Blueprint $table) {
-           
+
             $table->dropColumn('type');
         });
     }

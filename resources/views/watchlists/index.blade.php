@@ -25,7 +25,7 @@
                 @forelse($watchlists as $watchlist)
                     <div class="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full relative">
                         
-                        <div class="relative h-[360px] sm:h-[400px] overflow-hidden bg-gray-800">
+                        <div class="relative h-[280px] sm:h-[400px] overflow-hidden bg-gray-800">
                             @if(!empty($watchlist->poster_path))
                                 <img src="https://image.tmdb.org/t/p/w500{{ $watchlist->poster_path }}" alt="{{ $watchlist->title }}" 
                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -36,7 +36,7 @@
                                 </div>
                             @endif
                             
-                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
                                 
                                 <a href="{{ route('movies.show', ['id' => $watchlist->tmdb_movie_id, 'type' => $watchlist->type ?? 'movie']) }}" class="text-white font-bold bg-indigo-600 hover:bg-indigo-500 px-6 py-2.5 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg flex items-center w-40 justify-center text-sm">
                                     Lihat Detail

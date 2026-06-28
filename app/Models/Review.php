@@ -10,10 +10,10 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 
-        'tmdb_movie_id', 
-        'rating', 
-        'comment'
+        'user_id',
+        'tmdb_movie_id',
+        'rating',
+        'comment',
     ];
 
     public function user()

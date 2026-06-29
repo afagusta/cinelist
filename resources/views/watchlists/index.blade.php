@@ -21,14 +21,31 @@
                 </p>
             </div>
 
+            <div class="mb-8 px-4 sm:px-0">
+                <form action="{{ route('watchlists.index') }}" method="GET" class="flex flex-wrap items-center gap-3">
+                    <div class="relative flex-1 min-w-[200px]">
+                        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari judul di watchlist kamu..." 
+                            class="w-full pl-12 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    </div>
+                    @if($type)
+                        <input type="hidden" name="type" value="{{ $type }}">
+                    @endif
+                    <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition">Cari</button>
+                    @if($search)
+                        <a href="{{ route('watchlists.index', array_filter(['type' => $type])) }}" class="px-6 py-3 bg-gray-800 text-gray-400 font-bold rounded-xl hover:text-white hover:bg-gray-700 transition border border-gray-700">Reset</a>
+                    @endif
+                </form>
+            </div>
+
             <div class="mb-8 px-4 sm:px-0 flex flex-wrap gap-2">
-                <a href="{{ route('watchlists.index') }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ !$type ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
+                <a href="{{ route('watchlists.index', array_filter(['search' => $search])) }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ !$type && !$search ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
                     Semua
                 </a>
-                <a href="{{ route('watchlists.index', ['type' => 'movie']) }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ $type === 'movie' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
+                <a href="{{ route('watchlists.index', array_filter(['type' => 'movie', 'search' => $search])) }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ $type === 'movie' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
                     Movie
                 </a>
-                <a href="{{ route('watchlists.index', ['type' => 'tv']) }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ $type === 'tv' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
+                <a href="{{ route('watchlists.index', array_filter(['type' => 'tv', 'search' => $search])) }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ $type === 'tv' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
                     Series
                 </a>
             </div>
@@ -107,7 +124,9 @@
                             <svg class="w-12 h-12 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3">
-                            @if($type === 'movie')
+                            @if($search)
+                                Hasil Tidak Ditemukan
+                            @elseif($type === 'movie')
                                 Belum Ada Movie di Watchlist
                             @elseif($type === 'tv')
                                 Belum Ada Series di Watchlist
@@ -116,15 +135,19 @@
                             @endif
                         </h3>
                         <p class="text-gray-400 mb-8 text-lg">
-                            @if($type)
+                            @if($search)
+                                Tidak ada judul "<strong class="text-white">{{ $search }}</strong>" di watchlist kamu.
+                            @elseif($type)
                                 Kamu belum menyimpan {{ $type === 'tv' ? 'tv series' : 'film' }} apapun ke dalam daftar tontonan.
                             @else
                                 Kamu belum menyimpan film atau tv series apapun ke dalam daftar tontonan. Yuk cari film favoritmu sekarang!
                             @endif
                         </p>
-                        <a href="{{ route('movies.index') }}" class="inline-block px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition shadow-lg transform hover:-translate-y-1">
-                            Mulai Eksplorasi Film
-                        </a>
+                        @if(!$search)
+                            <a href="{{ route('movies.index') }}" class="inline-block px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition shadow-lg transform hover:-translate-y-1">
+                                Mulai Eksplorasi Film
+                            </a>
+                        @endif
                     </div>
                 @endforelse
             </div>

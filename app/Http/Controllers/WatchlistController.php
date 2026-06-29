@@ -11,6 +11,7 @@ class WatchlistController extends Controller
     public function index(Request $request)
     {
         $type = $request->input('type');
+        $search = $request->input('search');
 
         $query = Auth::user()->watchlists()->latest();
 
@@ -18,9 +19,13 @@ class WatchlistController extends Controller
             $query->where('type', $type);
         }
 
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+
         $watchlists = $query->get();
 
-        return view('watchlists.index', compact('watchlists', 'type'));
+        return view('watchlists.index', compact('watchlists', 'type', 'search'));
     }
 
     public function store(Request $request)

@@ -163,6 +163,70 @@ test('index filters by tv type', function () {
     $response->assertDontSee('Movie Item');
 });
 
+test('index search filters by title', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'title' => 'The Dark Knight',
+        'type' => 'movie',
+    ]);
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'title' => 'Inception',
+        'type' => 'movie',
+    ]);
+
+    $response = $this->actingAs($user)->get(route('watchlists.index', ['search' => 'Dark']));
+
+    $response->assertOk();
+    $response->assertSee('The Dark Knight');
+    $response->assertDontSee('Inception');
+});
+
+test('index search shows empty state when no match', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'title' => 'The Dark Knight',
+        'type' => 'movie',
+    ]);
+
+    $response = $this->actingAs($user)->get(route('watchlists.index', ['search' => 'Zombie']));
+
+    $response->assertOk();
+    $response->assertSee('Hasil Tidak Ditemukan');
+    $response->assertSee('Zombie');
+    $response->assertDontSee('The Dark Knight');
+});
+
+test('index search works with type filter', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'title' => 'Breaking Bad',
+        'type' => 'tv',
+    ]);
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'title' => 'Breaking News',
+        'type' => 'movie',
+    ]);
+
+    $response = $this->actingAs($user)->get(route('watchlists.index', ['search' => 'Breaking', 'type' => 'tv']));
+
+    $response->assertOk();
+    $response->assertSee('Breaking Bad');
+    $response->assertDontSee('Breaking News');
+});
+
 test('guest cannot access watchlists', function () {
     $response = $this->get(route('watchlists.index'));
     $response->assertRedirect(route('login'));

@@ -39,10 +39,19 @@
                         
                         <div class="relative h-[280px] sm:h-[400px] overflow-hidden bg-gray-800">
 
-                            <div class="absolute top-3 left-3 z-10">
+                                <div class="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
                                 <span class="px-3 py-1 text-xs font-extrabold uppercase rounded-lg border {{ $watchlist->type === 'tv' ? 'bg-pink-900/30 text-pink-400 border-pink-800/30' : 'bg-blue-900/30 text-blue-400 border-blue-800/30' }}">
                                     {{ $watchlist->type === 'tv' ? 'SERIES' : 'MOVIE' }}
                                 </span>
+                                @if($watchlist->is_watched)
+                                    <span class="px-3 py-1 text-xs font-bold rounded-lg bg-green-900/40 text-green-400 border border-green-800/40">
+                                        ✓ Sudah Ditonton
+                                    </span>
+                                @else
+                                    <span class="px-3 py-1 text-xs font-bold rounded-lg bg-yellow-900/30 text-yellow-400 border border-yellow-800/30">
+                                        ● Belum Ditonton
+                                    </span>
+                                @endif
                             </div>
 
                             @if(!empty($watchlist->poster_path))
@@ -60,6 +69,15 @@
                                 <a href="{{ route('movies.show', ['id' => $watchlist->tmdb_movie_id, 'type' => $watchlist->type ?? 'movie']) }}" class="text-white font-bold bg-indigo-600 hover:bg-indigo-500 px-6 py-2.5 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg flex items-center w-40 justify-center text-sm">
                                     Lihat Detail
                                 </a>
+
+                                <form action="{{ route('watchlists.toggle-watched', $watchlist->id) }}" method="POST" class="transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75 w-40">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="text-white font-bold px-6 py-2.5 rounded-full flex items-center w-full justify-center text-sm transition mb-2 {{ $watchlist->is_watched ? 'bg-gray-700 hover:bg-yellow-700 border border-gray-600' : 'bg-green-800/80 border border-green-700 hover:bg-green-600' }}">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        {{ $watchlist->is_watched ? 'Tandai Belum' : 'Tandai Ditonton' }}
+                                    </button>
+                                </form>
 
                                 <form action="{{ route('watchlists.destroy', $watchlist->id) }}" method="POST" class="transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75 w-40">
                                     @csrf

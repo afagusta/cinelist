@@ -23,6 +23,14 @@ class WatchlistFactory extends Factory
             'title' => fake()->sentence(3),
             'poster_path' => '/'.fake()->uuid().'.jpg',
             'type' => fake()->randomElement(['movie', 'tv']),
+            'is_watched' => false,
         ];
+    }
+
+    public function watched(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_watched' => true,
+        ]);
     }
 }

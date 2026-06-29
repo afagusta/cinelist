@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/watchlists', [WatchlistController::class, 'index'])->name('watchlists.index');
     Route::post('/watchlists', [WatchlistController::class, 'store'])->name('watchlists.store');
     Route::delete('/watchlists/{watchlist}', [WatchlistController::class, 'destroy'])->name('watchlists.destroy');
+    Route::patch('/watchlists/{watchlist}/toggle-watched', [WatchlistController::class, 'toggleWatched'])->name('watchlists.toggle-watched');
 
     // Route Review / Ulasan Lokal
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');

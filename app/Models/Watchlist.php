@@ -15,7 +15,15 @@ class Watchlist extends Model
         'title',
         'poster_path',
         'type',
+        'is_watched',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_watched' => 'boolean',
+        ];
+    }
 
     public function user()
     {

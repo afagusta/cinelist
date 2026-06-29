@@ -23,6 +23,7 @@ test('index displays user watchlists', function () {
 
     $response->assertOk();
     $response->assertSee('Saved Movie');
+    $response->assertSee('Belum Ditonton');
 });
 
 test('store creates a new watchlist entry', function () {
@@ -165,4 +166,57 @@ test('index filters by tv type', function () {
 test('guest cannot access watchlists', function () {
     $response = $this->get(route('watchlists.index'));
     $response->assertRedirect(route('login'));
+});
+
+test('toggle-watched marks as watched', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    $watchlist = Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'is_watched' => false,
+    ]);
+
+    $response = $this->actingAs($user)->patch(route('watchlists.toggle-watched', $watchlist));
+
+    $response->assertRedirect();
+    $response->assertSessionHas('success');
+
+    $this->assertDatabaseHas('watchlists', [
+        'id' => $watchlist->id,
+        'is_watched' => true,
+    ]);
+});
+
+test('toggle-watched marks as unwatched', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    $watchlist = Watchlist::factory()->watched()->create([
+        'user_id' => $user->id,
+    ]);
+
+    $response = $this->actingAs($user)->patch(route('watchlists.toggle-watched', $watchlist));
+
+    $response->assertRedirect();
+
+    $this->assertDatabaseHas('watchlists', [
+        'id' => $watchlist->id,
+        'is_watched' => false,
+    ]);
+});
+
+test('toggle-watched cannot toggle another users watchlist', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+    $other = User::factory()->create();
+
+    $watchlist = Watchlist::factory()->create([
+        'user_id' => $other->id,
+        'is_watched' => false,
+    ]);
+
+    $response = $this->actingAs($user)->patch(route('watchlists.toggle-watched', $watchlist));
+
+    $response->assertForbidden();
 });

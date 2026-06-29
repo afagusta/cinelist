@@ -52,4 +52,17 @@ class WatchlistController extends Controller
 
         return back()->with('success', 'Film dihapus dari Watchlist!');
     }
+
+    public function toggleWatched(Watchlist $watchlist)
+    {
+        abort_if($watchlist->user_id !== Auth::id(), 403);
+
+        $watchlist->update([
+            'is_watched' => ! $watchlist->is_watched,
+        ]);
+
+        $status = $watchlist->is_watched ? 'Ditandai sudah ditonton' : 'Ditandai belum ditonton';
+
+        return back()->with('success', "{$watchlist->title} — {$status}!");
+    }
 }

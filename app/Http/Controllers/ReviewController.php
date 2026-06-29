@@ -16,14 +16,22 @@ class ReviewController extends Controller
             'comment' => 'required|string|max:1000',
         ]);
 
-        Review::create([
-            'user_id' => Auth::id(),
-            'tmdb_movie_id' => $request->tmdb_movie_id,
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-        ]);
+        $review = Review::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'tmdb_movie_id' => $request->tmdb_movie_id,
+            ],
+            [
+                'rating' => $request->rating,
+                'comment' => $request->comment,
+            ],
+        );
 
-        return back()->with('status', 'Ulasan berhasil ditambahkan!');
+        $message = $review->wasRecentlyCreated
+            ? 'Ulasan berhasil ditambahkan!'
+            : 'Ulasan berhasil diperbarui!';
+
+        return back()->with('status', $message);
     }
 
     public function destroy(Review $review)

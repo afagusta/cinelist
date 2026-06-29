@@ -102,6 +102,35 @@ test('non-owner cannot destroy another users review', function () {
     $this->assertDatabaseHas('reviews', ['id' => $review->id]);
 });
 
+test('store prevents duplicate review for same movie', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    Review::factory()->create([
+        'user_id' => $user->id,
+        'tmdb_movie_id' => 100,
+        'rating' => 3,
+        'comment' => 'Biasa aja',
+    ]);
+
+    $response = $this->actingAs($user)->post(route('reviews.store'), [
+        'tmdb_movie_id' => 100,
+        'rating' => 5,
+        'comment' => 'Ternyata bagus!',
+    ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHas('status');
+
+    $this->assertDatabaseCount('reviews', 1);
+    $this->assertDatabaseHas('reviews', [
+        'user_id' => $user->id,
+        'tmdb_movie_id' => 100,
+        'rating' => 5,
+        'comment' => 'Ternyata bagus!',
+    ]);
+});
+
 test('guest cannot create reviews', function () {
     $response = $this->post(route('reviews.store'), [
         'tmdb_movie_id' => 100,

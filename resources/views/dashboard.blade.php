@@ -49,9 +49,18 @@
                         <div class="relative h-56 md:h-80 overflow-hidden">
                             <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] ?? $movie['name'] }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             
-                            <div class="absolute top-0 right-0 bg-gray-950/80 text-yellow-400 font-bold px-3 py-1 m-3 rounded-lg flex items-center backdrop-blur-md z-10 border border-gray-700/50">
+                            @php $dlocal = $localRatings[$movie['id']] ?? null; @endphp
+                            <div class="absolute top-0 right-0 m-3 z-10 flex flex-col gap-1.5 items-end">
+                                @if($dlocal && $dlocal['total_reviews'] > 0)
+                                    <span class="bg-green-900/50 text-green-400 font-bold px-2 py-1 rounded-lg flex items-center text-xs backdrop-blur-md border border-green-800/50" title="Rating dari Pengguna CineList">
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                        {{ $dlocal['avg_rating'] }}
+                                    </span>
+                                @endif
+                                <span class="bg-gray-950/80 text-yellow-400 font-bold px-3 py-1 rounded-lg flex items-center backdrop-blur-md border border-gray-700/50">
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                 {{ number_format($movie['vote_average'], 1) }}
+                            </span>
                             </div>
 
                             <div class="absolute inset-0 bg-gray-950/70 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">

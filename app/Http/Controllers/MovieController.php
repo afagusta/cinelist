@@ -49,6 +49,14 @@ class MovieController extends Controller
         $currentPage = $data['page'] ?? 1;
         $perPage = count($movies) ?: 20;
 
+        $movieIds = collect($movies)->pluck('id');
+
+        $localRatings = Review::whereIn('tmdb_movie_id', $movieIds)
+            ->selectRaw('tmdb_movie_id, ROUND(AVG(rating), 1) as avg_rating, COUNT(*) as total_reviews')
+            ->groupBy('tmdb_movie_id')
+            ->get()
+            ->keyBy('tmdb_movie_id');
+
         $movies = new LengthAwarePaginator(
             $movies,
             $total,
@@ -57,7 +65,7 @@ class MovieController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
-        return view('movies.index', compact('movies', 'query', 'genreMap', 'dropdownGenres', 'genreId'));
+        return view('movies.index', compact('movies', 'query', 'genreMap', 'dropdownGenres', 'genreId', 'localRatings'));
     }
 
     public function show($id, $type = 'movie')
@@ -107,6 +115,13 @@ class MovieController extends Controller
 
         $topMovies = $response->json()['results'] ?? [];
 
-        return view('dashboard', compact('topMovies'));
+        $movieIds = collect($topMovies)->pluck('id');
+        $localRatings = Review::whereIn('tmdb_movie_id', $movieIds)
+            ->selectRaw('tmdb_movie_id, ROUND(AVG(rating), 1) as avg_rating, COUNT(*) as total_reviews')
+            ->groupBy('tmdb_movie_id')
+            ->get()
+            ->keyBy('tmdb_movie_id');
+
+        return view('dashboard', compact('topMovies', 'localRatings'));
     }
 }

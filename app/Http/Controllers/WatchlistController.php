@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
 use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,14 @@ class WatchlistController extends Controller
 
         $watchlists = $query->get();
 
-        return view('watchlists.index', compact('watchlists', 'type', 'search'));
+        $movieIds = $watchlists->pluck('tmdb_movie_id');
+        $localRatings = Review::whereIn('tmdb_movie_id', $movieIds)
+            ->selectRaw('tmdb_movie_id, ROUND(AVG(rating), 1) as avg_rating, COUNT(*) as total_reviews')
+            ->groupBy('tmdb_movie_id')
+            ->get()
+            ->keyBy('tmdb_movie_id');
+
+        return view('watchlists.index', compact('watchlists', 'type', 'search', 'localRatings'));
     }
 
     public function store(Request $request)

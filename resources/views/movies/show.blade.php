@@ -37,6 +37,9 @@
                         {{ $movie['title'] ?? $movie['name'] ?? 'Tanpa Judul' }}
                     </h1>
                     
+                    @php
+                        $localAvg = $reviews->count() > 0 ? round($reviews->avg('rating'), 1) : null;
+                    @endphp
                     <div class="flex flex-wrap items-center gap-4 text-sm sm:text-base text-gray-300 mb-6 font-medium">
                         <span class="flex items-center bg-yellow-500/10 text-yellow-400 px-3 py-1 rounded-lg border border-yellow-500/20 backdrop-blur-sm" title="Rating Global dari TMDB">
                             <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -44,6 +47,15 @@
                             </svg>
                             <span class="font-bold text-white mr-1">{{ number_format($movie['vote_average'] ?? 0, 1) }}</span> / 10
                         </span>
+                        @if($localAvg)
+                            <span class="flex items-center bg-green-900/40 text-green-400 px-3 py-1 rounded-lg border border-green-800/40 backdrop-blur-sm" title="Rating Rata-rata dari Pengguna CineList">
+                                <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <span class="font-bold text-white mr-1">{{ $localAvg }}</span> / 5.0
+                                <span class="text-green-400/60 text-xs ml-1">({{ $reviews->count() }} ulasan)</span>
+                            </span>
+                        @endif
                         <span>•</span>
                         <span>{{ \Carbon\Carbon::parse($movie['release_date'] ?? $movie['first_air_date'] ?? now())->format('d M Y') }}</span>
                         

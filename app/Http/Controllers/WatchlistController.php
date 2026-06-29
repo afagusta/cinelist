@@ -8,11 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class WatchlistController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $watchlists = Auth::user()->watchlists()->latest()->get();
+        $type = $request->input('type');
 
-        return view('watchlists.index', compact('watchlists'));
+        $query = Auth::user()->watchlists()->latest();
+
+        if ($type && in_array($type, ['movie', 'tv'])) {
+            $query->where('type', $type);
+        }
+
+        $watchlists = $query->get();
+
+        return view('watchlists.index', compact('watchlists', 'type'));
     }
 
     public function store(Request $request)

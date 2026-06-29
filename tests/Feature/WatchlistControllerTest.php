@@ -112,6 +112,56 @@ test('destroy does not delete another users watchlist', function () {
     $this->assertDatabaseHas('watchlists', ['id' => $watchlist->id]);
 });
 
+test('index filters by movie type', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'tmdb_movie_id' => 1,
+        'title' => 'Movie Item',
+        'type' => 'movie',
+    ]);
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'tmdb_movie_id' => 2,
+        'title' => 'TV Item',
+        'type' => 'tv',
+    ]);
+
+    $response = $this->actingAs($user)->get(route('watchlists.index', ['type' => 'movie']));
+
+    $response->assertOk();
+    $response->assertSee('Movie Item');
+    $response->assertDontSee('TV Item');
+});
+
+test('index filters by tv type', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'tmdb_movie_id' => 1,
+        'title' => 'Movie Item',
+        'type' => 'movie',
+    ]);
+
+    Watchlist::factory()->create([
+        'user_id' => $user->id,
+        'tmdb_movie_id' => 2,
+        'title' => 'TV Item',
+        'type' => 'tv',
+    ]);
+
+    $response = $this->actingAs($user)->get(route('watchlists.index', ['type' => 'tv']));
+
+    $response->assertOk();
+    $response->assertSee('TV Item');
+    $response->assertDontSee('Movie Item');
+});
+
 test('guest cannot access watchlists', function () {
     $response = $this->get(route('watchlists.index'));
     $response->assertRedirect(route('login'));

@@ -15,10 +15,22 @@
                 </div>
             @endif
 
-            <div class="mb-8 px-4 sm:px-0">
+            <div class="mb-6 px-4 sm:px-0 flex flex-wrap items-center justify-between gap-4">
                 <p class="text-gray-400 text-lg">
                     Kamu memiliki <span class="font-bold text-indigo-400">{{ count($watchlists) }} film/series</span> yang tersimpan di daftar pantauan.
                 </p>
+            </div>
+
+            <div class="mb-8 px-4 sm:px-0 flex flex-wrap gap-2">
+                <a href="{{ route('watchlists.index') }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ !$type ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
+                    Semua
+                </a>
+                <a href="{{ route('watchlists.index', ['type' => 'movie']) }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ $type === 'movie' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
+                    Movie
+                </a>
+                <a href="{{ route('watchlists.index', ['type' => 'tv']) }}" class="px-5 py-2 rounded-xl font-bold text-sm transition border {{ $type === 'tv' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-900 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}">
+                    Series
+                </a>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-4 sm:px-0">
@@ -26,6 +38,13 @@
                     <div class="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full relative">
                         
                         <div class="relative h-[280px] sm:h-[400px] overflow-hidden bg-gray-800">
+
+                            <div class="absolute top-3 left-3 z-10">
+                                <span class="px-3 py-1 text-xs font-extrabold uppercase rounded-lg border {{ $watchlist->type === 'tv' ? 'bg-pink-900/30 text-pink-400 border-pink-800/30' : 'bg-blue-900/30 text-blue-400 border-blue-800/30' }}">
+                                    {{ $watchlist->type === 'tv' ? 'SERIES' : 'MOVIE' }}
+                                </span>
+                            </div>
+
                             @if(!empty($watchlist->poster_path))
                                 <img src="https://image.tmdb.org/t/p/w500{{ $watchlist->poster_path }}" alt="{{ $watchlist->title }}" 
                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -69,8 +88,22 @@
                         <div class="w-24 h-24 bg-indigo-900/30 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-800/50">
                             <svg class="w-12 h-12 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-white mb-3">Watchlist Masih Kosong</h3>
-                        <p class="text-gray-400 mb-8 text-lg">Kamu belum menyimpan film atau tv series apapun ke dalam daftar tontonan. Yuk cari film favoritmu sekarang!</p>
+                        <h3 class="text-2xl font-bold text-white mb-3">
+                            @if($type === 'movie')
+                                Belum Ada Movie di Watchlist
+                            @elseif($type === 'tv')
+                                Belum Ada Series di Watchlist
+                            @else
+                                Watchlist Masih Kosong
+                            @endif
+                        </h3>
+                        <p class="text-gray-400 mb-8 text-lg">
+                            @if($type)
+                                Kamu belum menyimpan {{ $type === 'tv' ? 'tv series' : 'film' }} apapun ke dalam daftar tontonan.
+                            @else
+                                Kamu belum menyimpan film atau tv series apapun ke dalam daftar tontonan. Yuk cari film favoritmu sekarang!
+                            @endif
+                        </p>
                         <a href="{{ route('movies.index') }}" class="inline-block px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition shadow-lg transform hover:-translate-y-1">
                             Mulai Eksplorasi Film
                         </a>

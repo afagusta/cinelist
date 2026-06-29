@@ -34,6 +34,25 @@ class ReviewController extends Controller
         return back()->with('status', $message);
     }
 
+    public function update(Request $request, Review $review)
+    {
+        if (Auth::id() !== $review->user_id) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit ulasan ini.');
+        }
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        $review->update([
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return back()->with('status', 'Ulasan berhasil diperbarui!');
+    }
+
     public function destroy(Review $review)
     {
         if (Auth::id() !== $review->user_id && ! Auth::user()->hasRole('admin')) {

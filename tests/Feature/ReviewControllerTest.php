@@ -131,6 +131,59 @@ test('store prevents duplicate review for same movie', function () {
     ]);
 });
 
+test('owner can update their own review', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+
+    $review = Review::factory()->create([
+        'user_id' => $user->id,
+        'tmdb_movie_id' => 100,
+        'rating' => 3,
+        'comment' => 'Lumayan',
+    ]);
+
+    $response = $this->actingAs($user)->patch(route('reviews.update', $review), [
+        'rating' => 5,
+        'comment' => 'Ternyata sangat bagus!',
+    ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHas('status');
+
+    $this->assertDatabaseHas('reviews', [
+        'id' => $review->id,
+        'rating' => 5,
+        'comment' => 'Ternyata sangat bagus!',
+    ]);
+});
+
+test('non-owner cannot update another users review', function () {
+    $user = User::factory()->create();
+    $user->assignRole('user');
+    $other = User::factory()->create();
+    $other->assignRole('user');
+
+    $review = Review::factory()->create([
+        'user_id' => $other->id,
+        'tmdb_movie_id' => 100,
+        'rating' => 3,
+        'comment' => 'Lumayan',
+    ]);
+
+    $response = $this->actingAs($user)->patch(route('reviews.update', $review), [
+        'rating' => 5,
+        'comment' => 'Diubah oleh orang lain',
+    ]);
+
+    $response->assertForbidden();
+
+    $this->assertDatabaseHas('reviews', [
+        'id' => $review->id,
+        'rating' => 3,
+        'comment' => 'Lumayan',
+    ]);
+});
+
 test('guest cannot create reviews', function () {
     $response = $this->post(route('reviews.store'), [
         'tmdb_movie_id' => 100,

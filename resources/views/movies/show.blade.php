@@ -168,7 +168,8 @@
                         
                         <div class="space-y-6">
                             @forelse($reviews ?? [] as $review)
-                                <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700 transition duration-300 hover:shadow-lg hover:border-gray-600 group">
+                                <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700 transition duration-300 hover:shadow-lg hover:border-gray-600 group"
+                                     x-data="{ editing: false }">
                                     <div class="flex justify-between items-start mb-3">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 rounded-full bg-indigo-900 text-indigo-300 font-bold flex items-center justify-center mr-3 uppercase border border-indigo-700/50">
@@ -180,25 +181,60 @@
                                             </div>
                                         </div>
                                         
-                                        @if(auth()->check() && (auth()->id() === $review->user_id || auth()->user()->role === 'admin'))
-                                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-400 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-red-900/30 hover:bg-red-600 transition border border-red-800/50 hover:border-red-500 flex items-center" onclick="return confirm('Yakin ingin menghapus ulasan ini secara permanen?')">
-                                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                    </svg>
-                                                </button>
-                                            </form>
+                                        @if(auth()->check() && (auth()->id() === $review->user_id || auth()->user()->hasRole('admin')))
+                                            <div class="flex gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                @if(auth()->id() === $review->user_id)
+                                                    <button type="button" x-on:click="editing = !editing" 
+                                                        class="text-indigo-400 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-indigo-900/30 hover:bg-indigo-600 transition border border-indigo-800/50 hover:border-indigo-500 flex items-center">
+                                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                        Edit
+                                                    </button>
+                                                @endif
+                                                <form action="{{ route('reviews.destroy', $review->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-400 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg bg-red-900/30 hover:bg-red-600 transition border border-red-800/50 hover:border-red-500 flex items-center" onclick="return confirm('Yakin ingin menghapus ulasan ini secara permanen?')">
+                                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         @endif
                                     </div>
-                                    
-                                    <div class="text-yellow-400 text-xs mb-3 pl-13">
-                                        {{ str_repeat('⭐', $review->rating) }}
-                                    </div>
-                                    
-                                    <p class="text-gray-300 text-sm leading-relaxed bg-gray-900 p-4 rounded-xl border border-gray-700/50">
-                                        {{ $review->comment }}
-                                    </p>
+
+                                    <template x-if="!editing">
+                                        <div>
+                                            <div class="text-yellow-400 text-xs mb-3 pl-13">
+                                                {{ str_repeat('⭐', $review->rating) }}
+                                            </div>
+                                            <p class="text-gray-300 text-sm leading-relaxed bg-gray-900 p-4 rounded-xl border border-gray-700/50">
+                                                {{ $review->comment }}
+                                            </p>
+                                        </div>
+                                    </template>
+
+                                    <template x-if="editing">
+                                        <form action="{{ route('reviews.update', $review->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <div class="mb-4">
+                                                <select name="rating" class="w-full bg-gray-950 border border-gray-700 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm text-gray-300 py-3 appearance-none cursor-pointer">
+                                                    <option value="5" {{ $review->rating == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐ (5 - Sangat Bagus)</option>
+                                                    <option value="4" {{ $review->rating == 4 ? 'selected' : '' }}>⭐⭐⭐⭐ (4 - Bagus)</option>
+                                                    <option value="3" {{ $review->rating == 3 ? 'selected' : '' }}>⭐⭐⭐ (3 - Lumayan)</option>
+                                                    <option value="2" {{ $review->rating == 2 ? 'selected' : '' }}>⭐⭐ (2 - Buruk)</option>
+                                                    <option value="1" {{ $review->rating == 1 ? 'selected' : '' }}>⭐ (1 - Sangat Buruk)</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-4">
+                                                <textarea name="comment" rows="4" class="w-full bg-gray-950 border border-gray-700 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm text-white placeholder-gray-500 resize-none py-3">{{ $review->comment }}</textarea>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2 rounded-xl transition text-sm">Simpan</button>
+                                                <button type="button" x-on:click="editing = false" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold px-5 py-2 rounded-xl transition text-sm">Batal</button>
+                                            </div>
+                                        </form>
+                                    </template>
                                 </div>
                             @empty
                                 <div class="text-center py-12 px-4">

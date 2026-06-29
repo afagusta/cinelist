@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
 
     // Route Review / Ulasan Lokal
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::patch('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 

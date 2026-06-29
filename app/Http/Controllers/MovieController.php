@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
 
 class MovieController extends Controller
@@ -12,6 +13,7 @@ class MovieController extends Controller
     {
         $query = $request->input('search');
         $genreId = $request->input('genre');
+        $page = $request->input('page', 1);
 
         $movieGenres = Http::withToken(env('TMDB_TOKEN'))
             ->get('https://api.themoviedb.org/3/genre/movie/list', ['language' => 'id-ID'])
@@ -25,27 +27,35 @@ class MovieController extends Controller
 
         $dropdownGenres = collect(array_merge($movieGenres, $tvGenres))->unique('id')->sortBy('name');
 
+        $params = ['language' => 'id-ID', 'page' => $page];
+
         if ($query) {
+            $params['query'] = $query;
             $response = Http::withToken(env('TMDB_TOKEN'))
-                ->get('https://api.themoviedb.org/3/search/multi', [
-                    'query' => $query,
-                    'language' => 'id-ID',
-                ]);
+                ->get('https://api.themoviedb.org/3/search/multi', $params);
         } elseif ($genreId) {
+            $params['with_genres'] = $genreId;
+            $params['sort_by'] = 'popularity.desc';
             $response = Http::withToken(env('TMDB_TOKEN'))
-                ->get('https://api.themoviedb.org/3/discover/movie', [
-                    'with_genres' => $genreId,
-                    'language' => 'id-ID',
-                    'sort_by' => 'popularity.desc',
-                ]);
+                ->get('https://api.themoviedb.org/3/discover/movie', $params);
         } else {
             $response = Http::withToken(env('TMDB_TOKEN'))
-                ->get('https://api.themoviedb.org/3/trending/all/day', [
-                    'language' => 'id-ID',
-                ]);
+                ->get('https://api.themoviedb.org/3/trending/all/day', $params);
         }
 
-        $movies = $response->json()['results'] ?? [];
+        $data = $response->json();
+        $movies = $data['results'] ?? [];
+        $total = $data['total_results'] ?? 0;
+        $currentPage = $data['page'] ?? 1;
+        $perPage = count($movies) ?: 20;
+
+        $movies = new LengthAwarePaginator(
+            $movies,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
         return view('movies.index', compact('movies', 'query', 'genreMap', 'dropdownGenres', 'genreId'));
     }
@@ -85,13 +95,7 @@ class MovieController extends Controller
     {
         $user = auth()->user();
 
-        if ($user && (
-            $user->role === 'admin' ||
-            $user->role === 'Admin' ||
-            $user->role == 1 ||
-            $user->is_admin == 1 ||
-            (method_exists($user, 'hasRole') && $user->hasRole('admin'))
-        )) {
+        if ($user && $user->hasRole('admin')) {
             return redirect()->route('admin.dashboard');
         }
 

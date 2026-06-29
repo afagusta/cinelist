@@ -1,5 +1,14 @@
 <x-app-layout>
-    <div class="py-12 bg-gray-950 min-h-screen">
+    <div class="py-12 bg-gray-950 min-h-screen" x-data="{ loading: false }"
+         x-on:click="
+            let el = $event.target.closest('a');
+            if (el && el.href) {
+                $event.preventDefault();
+                loading = true;
+                $nextTick(() => window.location = el.href);
+            }
+         ">
+        <x-loading-overlay />
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             <div class="mb-6 px-4 sm:px-0">

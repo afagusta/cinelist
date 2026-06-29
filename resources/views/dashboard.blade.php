@@ -1,4 +1,14 @@
 <x-app-layout>
+    <div x-data="{ loading: false }"
+         x-on:click="
+            let el = $event.target.closest('a');
+            if (el && el.href) {
+                $event.preventDefault();
+                loading = true;
+                $nextTick(() => window.location = el.href);
+            }
+         ">
+    <x-loading-overlay />
     @if(count($topMovies) > 0)
     @php $heroMovie = $topMovies[0]; @endphp
     <div class="relative w-full h-[40vh] md:h-[60vh] bg-gray-950 flex items-center justify-center overflow-hidden">
@@ -74,5 +84,6 @@
                 @endforeach
             </div>
         </div>
+    </div>
     </div>
 </x-app-layout>

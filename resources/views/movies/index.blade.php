@@ -1,5 +1,14 @@
 <x-app-layout>
-    <div class="py-12 bg-gray-950 min-h-screen">
+    <div class="py-12 bg-gray-950 min-h-screen" x-data="{ loading: false }"
+         x-on:click="
+            let el = $event.target.closest('a');
+            if (el && el.href) {
+                $event.preventDefault();
+                loading = true;
+                $nextTick(() => window.location = el.href);
+            }
+         ">
+        <x-loading-overlay />
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             <div class="mb-8 px-4 sm:px-0">
@@ -17,7 +26,7 @@
             @endif
 
             <div class="bg-gray-900 p-6 rounded-2xl shadow-xl border border-gray-800 mb-10 mx-4 sm:mx-0">
-                <form action="{{ route('movies.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+                <form action="{{ route('movies.index') }}" method="GET" x-on:submit.prevent="loading = true; $nextTick(() => $el.submit())" class="flex flex-col md:flex-row gap-4" id="catalog-form">
                     
                     <div class="flex-1 relative">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

@@ -113,7 +113,7 @@
                                 <form action="{{ route('watchlists.toggle-watched', $watchlist->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="w-full flex items-center justify-center gap-1 py-2.5 px-1 rounded-lg font-bold transition-colors shadow-lg {{ $watchlist->is_watched ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20' : 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/20' }}">
+                                    <button type="submit" class="w-full flex items-center justify-center gap-1 py-2.5 px-1 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 font-bold transition-colors">
                                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                         <span class="text-[11px] sm:text-xs whitespace-nowrap">{{ $watchlist->is_watched ? 'Tandai Belum' : 'Tandai Ditonton' }}</span>
                                     </button>

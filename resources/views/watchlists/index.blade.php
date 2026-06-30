@@ -62,10 +62,10 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-4 sm:px-0">
                 @forelse($watchlists as $watchlist)
                     <div class="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full relative">
-                        
+
                         <div class="relative h-[280px] sm:h-[400px] overflow-hidden bg-gray-800">
 
-                                <div class="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
+                            <div class="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
                                 <span class="px-3 py-1 text-xs font-extrabold uppercase rounded-lg border {{ $watchlist->type === 'tv' ? 'bg-pink-900/30 text-pink-400 border-pink-800/30' : 'bg-blue-900/30 text-blue-400 border-blue-800/30' }}">
                                     {{ $watchlist->type === 'tv' ? 'SERIES' : 'MOVIE' }}
                                 </span>
@@ -89,50 +89,45 @@
                                     {{ $wlocal['avg_rating'] }}
                                 </span>
                             @endif
-                            @if(!empty($watchlist->poster_path))
-                                <img src="https://image.tmdb.org/t/p/w500{{ $watchlist->poster_path }}" alt="{{ $watchlist->title }}" 
-                                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-gray-500 flex-col">
-                                    <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <span>No Image</span>
-                                </div>
-                            @endif
-                            
-                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
-                                
-                                <a href="{{ route('movies.show', ['id' => $watchlist->tmdb_movie_id, 'type' => $watchlist->type ?? 'movie']) }}" class="text-white font-bold bg-indigo-600 hover:bg-indigo-500 px-6 py-2.5 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg flex items-center w-40 justify-center text-sm">
-                                    Lihat Detail
-                                </a>
-
-                                <form action="{{ route('watchlists.toggle-watched', $watchlist->id) }}" method="POST" class="transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75 w-40">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="text-white font-bold px-6 py-2.5 rounded-full flex items-center w-full justify-center text-sm transition mb-2 {{ $watchlist->is_watched ? 'bg-gray-700 hover:bg-yellow-700 border border-gray-600' : 'bg-green-800/80 border border-green-700 hover:bg-green-600' }}">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        {{ $watchlist->is_watched ? 'Tandai Belum' : 'Tandai Ditonton' }}
-                                    </button>
-                                </form>
-
-                                <form action="{{ route('watchlists.destroy', $watchlist->id) }}" method="POST" class="transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75 w-40">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-white bg-red-900/80 border border-red-700 hover:bg-red-600 font-bold px-6 py-2.5 rounded-full shadow-lg flex items-center w-full justify-center text-sm transition" 
-                                        onclick="return confirm('Hapus {{ addslashes($watchlist->title) }} dari daftar tontonan kamu?')">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        Hapus
-                                    </button>
-                                </form>
-
-                            </div>
+                            <a href="{{ route('movies.show', ['id' => $watchlist->tmdb_movie_id, 'type' => $watchlist->type ?? 'movie']) }}">
+                                @if(!empty($watchlist->poster_path))
+                                    <img src="https://image.tmdb.org/t/p/w500{{ $watchlist->poster_path }}" alt="{{ $watchlist->title }}"
+                                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-gray-500 flex-col">
+                                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        <span>No Image</span>
+                                    </div>
+                                @endif
+                            </a>
                         </div>
-                        
-                        <div class="p-5 flex-grow bg-gray-900 flex flex-col justify-center border-t border-gray-800 relative z-10">
+
+                        <div class="p-5 flex flex-col flex-grow bg-gray-900 border-t border-gray-800 relative z-10">
                             <a href="{{ route('movies.show', ['id' => $watchlist->tmdb_movie_id, 'type' => $watchlist->type ?? 'movie']) }}" class="hover:text-indigo-400 transition">
                                 <h3 class="font-bold text-white text-lg line-clamp-2 text-center leading-snug" title="{{ $watchlist->title }}">
                                     {{ $watchlist->title }}
                                 </h3>
                             </a>
+
+                            <div class="grid grid-cols-2 gap-2 mt-4">
+                                <form action="{{ route('watchlists.toggle-watched', $watchlist->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="w-full flex items-center justify-center gap-1 py-2.5 px-1 rounded-lg font-bold transition-colors shadow-lg {{ $watchlist->is_watched ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20' : 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/20' }}">
+                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span class="text-[11px] sm:text-xs whitespace-nowrap">{{ $watchlist->is_watched ? 'Tandai Belum' : 'Tandai Ditonton' }}</span>
+                                    </button>
+                                </form>
+                                <form action="{{ route('watchlists.destroy', $watchlist->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-full flex items-center justify-center gap-1 py-2.5 px-1 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-bold transition-colors shadow-lg shadow-rose-500/20"
+                                        onclick="return confirm('Hapus {{ addslashes($watchlist->title) }} dari daftar tontonan kamu?')">
+                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        <span class="text-[11px] sm:text-xs whitespace-nowrap">Hapus</span>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
 
                     </div>

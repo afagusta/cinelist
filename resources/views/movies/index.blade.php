@@ -49,12 +49,12 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-3 rounded-xl transition duration-300 shadow-md flex items-center justify-center">
+                    <button type="submit" class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-3 rounded-xl transition duration-300 shadow-md flex items-center justify-center">
                         Tampilkan
                     </button>
                     
                     @if($query || $genreId)
-                        <a href="{{ route('movies.index') }}" class="bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-bold px-6 py-3 rounded-xl transition duration-300 text-center flex items-center justify-center">
+                        <a href="{{ route('movies.index') }}" class="w-full md:w-auto bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-bold px-6 py-3 rounded-xl transition duration-300 text-center flex items-center justify-center">
                             Reset
                         </a>
                     @endif
@@ -72,7 +72,7 @@
 
                     <div class="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full relative">
 
-                        <div class="relative h-[280px] sm:h-[400px] overflow-hidden bg-gray-800">
+                        <div class="relative h-[200px] sm:h-[300px] md:h-[400px] overflow-hidden bg-gray-800">
                             <a href="{{ route('movies.show', ['id' => $movie['id'], 'type' => $type]) }}">
                                 @if(!empty($movie['poster_path']))
                                     <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $title }}"

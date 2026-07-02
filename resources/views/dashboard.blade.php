@@ -24,7 +24,7 @@
             <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl">
                 {{ $heroMovie['title'] ?? $heroMovie['name'] }}
             </h1>
-            <p class="text-gray-300 text-lg md:text-xl mb-8 line-clamp-3 drop-shadow-lg px-4 md:px-12">
+            <p class="text-gray-300 text-sm sm:text-lg md:text-xl mb-8 line-clamp-3 drop-shadow-lg px-4 md:px-12">
                 {{ $heroMovie['overview'] }}
             </p>
             <a href="{{ route('movies.show', ['id' => $heroMovie['id'], 'type' => 'movie']) }}" class="inline-flex items-center px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-full transition duration-300 shadow-lg transform hover:scale-105">
@@ -46,7 +46,7 @@
                 @foreach(array_slice($topMovies, 1) as $movie)
                     <div class="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden hover:border-indigo-500 transition duration-300 transform hover:-translate-y-2 group flex flex-col h-full">
 
-                        <div class="relative h-56 md:h-80 overflow-hidden">
+                        <div class="relative h-44 sm:h-56 md:h-80 overflow-hidden">
                             <a href="{{ route('movies.show', ['id' => $movie['id'], 'type' => 'movie']) }}">
                                 <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] ?? $movie['name'] }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                             </a>

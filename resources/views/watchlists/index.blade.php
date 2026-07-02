@@ -40,9 +40,9 @@
                     @if($type)
                         <input type="hidden" name="type" value="{{ $type }}">
                     @endif
-                    <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition">Cari</button>
+                    <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition">Cari</button>
                     @if($search)
-                        <a href="{{ route('watchlists.index', array_filter(['type' => $type])) }}" class="px-6 py-3 bg-gray-800 text-gray-400 font-bold rounded-xl hover:text-white hover:bg-gray-700 transition border border-gray-700">Reset</a>
+                        <a href="{{ route('watchlists.index', array_filter(['type' => $type])) }}" class="w-full sm:w-auto px-6 py-3 bg-gray-800 text-gray-400 font-bold rounded-xl hover:text-white hover:bg-gray-700 transition border border-gray-700">Reset</a>
                     @endif
                 </form>
             </div>
@@ -63,7 +63,7 @@
                 @forelse($watchlists as $watchlist)
                     <div class="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full relative">
 
-                        <div class="relative h-[280px] sm:h-[400px] overflow-hidden bg-gray-800">
+                        <div class="relative h-[200px] sm:h-[300px] md:h-[400px] overflow-hidden bg-gray-800">
 
                             <div class="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
                                 <span class="px-3 py-1 text-xs font-extrabold uppercase rounded-lg border {{ $watchlist->type === 'tv' ? 'bg-pink-900/30 text-pink-400 border-pink-800/30' : 'bg-blue-900/30 text-blue-400 border-blue-800/30' }}">

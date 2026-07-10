@@ -16,7 +16,7 @@
                         {{ __('Katalog Film') }}
                     </x-nav-link>
                     <x-nav-link :href="route('watchlists.index')" :active="request()->routeIs('watchlists.index')">
-                        {{ __('Watchlist') }}
+                        {{ __('Watchlists') }}
                     </x-nav-link>
                 </div>
             </div>

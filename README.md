@@ -20,7 +20,7 @@ Cinelist adalah aplikasi web berbasis **Laravel** untuk mengelola katalog film, 
 Ikuti langkah-langkah di bawah ini untuk menjalankan proyek di lingkungan lokal (Local Development):
 
 ### 1. Clone Repositori
-git clone [https://github.com/afagusta/cinelist.git](https://github.com/afagusta/cinelist.git)  
+git clone https://github.com/afagusta/cinelist.git  
 cd cinelist
 
 ### 2. Install Dependensi PHP & Node.js
@@ -57,7 +57,7 @@ Buka dua jendela terminal terpisah:
 * **Terminal 1 (Vite Dev Server):** `npm run dev`
 * **Terminal 2 (Laravel Artisan Server):** `php artisan serve`
 
-Akses aplikasi di browser kamu melalui URL: `[http://127.0.0.1:8000](http://127.0.0.1:8000)`
+Akses aplikasi di browser kamu melalui URL: `http://127.0.0.1:8000`
 
 ---
 
@@ -76,4 +76,4 @@ Aplikasi ini melakukan request HTTP ke TMDB API menggunakan **Bearer Token** (`T
 ---
 
 ## 📝 Lisensi
-Proyek ini dibuat untuk keperluan akademik dan pengembangan pribadi di bawah lisensi [MIT License](LICENSE).
+Proyek ini dibuat untuk UAS matkul Pemrograman Web Lanjut.
